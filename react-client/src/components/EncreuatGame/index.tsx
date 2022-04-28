@@ -228,11 +228,7 @@ export function EncreuatGame() {
 												{chance[0] ? (
 													<div className="resultlist">
 														<span className={playerSymbol === "A" ? "or1 index" : "or2 index"}>
-															<img
-																className={resultat[index] === "A" && playerSymbol === "A" ? "win" : "loose"}
-																src="/asterisc_encreuat.svg"
-																alt=""
-															/>
+															<img className={resultat[index] === "A" ? "win" : "loose"} src="/asterisc_encreuat.svg" alt="" />
 														</span>
 														<span className={playerSymbol === "B" ? "or1 " : "or2 "}>
 															{playerSymbol === "A" ? (
@@ -263,11 +259,7 @@ export function EncreuatGame() {
 												{chance[1] ? (
 													<div className="resultlist">
 														<span className={playerSymbol === "A" ? "or2 index" : "or1 index"}>
-															<img
-																className={resultat[index] === "B" && playerSymbol === "B" ? "win" : "loose"}
-																src="/asterisc_encreuat.svg"
-																alt=""
-															/>
+															<img className={resultat[index] === "B" ? "win" : "loose"} src="/asterisc_encreuat.svg" alt="" />
 														</span>
 														<span className={playerSymbol === "B" ? "or2" : "or1"}>
 															{playerSymbol === "B" ? (

@@ -103,8 +103,8 @@ export class RoomController {
 
 		const PromiseArr = [];
 
-		for (let i = 0; i < VParaules.length; i++) {
-			var url = "https://vilaweb.cat/paraulogic/?diec=" + encodeURIComponent(VParaules[i]);
+		VParaules.forEach((paraula) => {
+			var url = "https://vilaweb.cat/paraulogic/?diec=" + encodeURIComponent(paraula);
 			PromiseArr.push(
 				axios.get(url).then(
 					(result) =>
@@ -139,7 +139,7 @@ export class RoomController {
 						})
 				)
 			);
-		}
+		});
 
 		Promise.all(PromiseArr).then((res) => {
 			socket.emit("start_game", { start: true, symbol: "A", room: room, dades: res });
