@@ -431,11 +431,10 @@ export const RespostesBoxContainer = styled.div`
 export const ChancesContainer = styled.div`
 	display: flex;
 	flex-direction: row;
-	padding: 0.3rem;
+	padding: 0.5rem;
 	width: 100%;
 	border-radius: 0.3rem;
-	background-color: #ffffff22;
-	justify-content: space-between;
+	justify-content: space-around;
 	align-items: flex-start;
 	.or1 {
 		order: 1;
@@ -443,42 +442,59 @@ export const ChancesContainer = styled.div`
 
 	.or2 {
 		order: 2;
-		align-self: flex-end;
-		justify-content: flex-end;
+	}
+	.or3 {
+		order: 3;
 	}
 	span.index {
 		display: flex;
 		align-self: center;
+		padding: 0 !important;
 		justify-content: center;
 		color: var(--text-par);
-		border-radius: 5rem;
-		font-size: 8px;
+		flex-shrink: 5;
+	}
+	span img {
+		display: flex;
 	}
 	.loose {
 		width: 0.8rem;
 		filter: grayscale(100%);
 	}
 	.win {
-		width: 0.8rem;
+		display: flex;
+		width: 0.9rem;
+		animation: ${blink} 2.5s infinite;
+		filter: drop-shadow(var(--shadow));
+	}
+	.pair {
+		display: flex;
+		width: 0.9rem;
+		filter: drop-shadow(var(--shadow)) grayscale(75%);
 	}
 	span.paraula {
-		color: var(--text-par);
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: var(--color-fosc);
 
+		flex-wrap: wrap;
 		font-size: 0.7rem;
 	}
 	div.block {
 		display: flex;
 		flex-direction: column;
-		justify-content: flex-start;
-		align-items: space-around;
-		width: 50%;
-		padding: 0.5rem;
+
+		padding: 0.3rem;
+		width: 49%;
+		border: 1px solid var(--border);
+		background: var(--color-clar);
+		box-shadow: 0.1rem 0.05rem 0.32rem #777;
 	}
 	div.resultlist {
 		display: flex;
 		flex-direction: row;
-		justify-content: space-between;
-		align-items: space-around;
+
 		background-color: #ffffff25;
 		border-radius: 0.17rem;
 		margin-bottom: 0.3rem;
@@ -486,16 +502,32 @@ export const ChancesContainer = styled.div`
 	div.resultlistright {
 		justify-content: flex-end;
 	}
+	.respostes-header {
+		display: flex;
+		padding: 0;
+		margin: 0;
+		color: var(--text-par);
+		padding: 0.2rem 0.2rem;
+		justify-content: space-between;
+		font-size: 0.5rem;
+		list-style: none;
+	}
 	div.resultlist span {
+		display: flex;
 		font-family: verdana;
 		font-weight: normal;
 		display: flex;
 		width: auto;
-		padding: 0px 0.9rem;
+		padding: 0.3rem;
+		flex-basis: 100%;
 	}
 	span.remaining {
+		display: flex;
+		align-items: center;
+		justify-content: center;
 		font-size: 0.5rem;
 		color: var(--text);
+		flex-shrink: 3;
 	}
 	h5 {
 		font-size: 0.8rem;

@@ -3,7 +3,7 @@ import { WrapperCountDownTimer } from "./CountDownTimer.styles";
 const { Howl, Howler } = require("howler");
 
 const CountDownTimer = (props: any) => {
-	const { onendtimer, setRemaining, initialSeconds = 5 } = props;
+	const { onendtimer, setRemaining, initialSeconds = 15 } = props;
 	const [seconds, setSeconds] = useState(initialSeconds);
 	const sound = new Howl({
 		src: ["/sounds/dong.mp3"],
@@ -21,8 +21,8 @@ const CountDownTimer = (props: any) => {
 			if (seconds > 0) {
 				setSeconds((prevSeconds) => (prevSeconds -= 1));
 				if (seconds > 0 && seconds - 1 < 5) {
-					sound.rate(seconds - 1 === 0 ? "0.2" : "0.5");
-					Howler.volume(0.5);
+					sound.rate(seconds - 1 === 0 ? "1.1" : "0.5");
+
 					sound.play();
 				}
 			}

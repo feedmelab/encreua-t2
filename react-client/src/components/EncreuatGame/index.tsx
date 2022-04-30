@@ -115,13 +115,22 @@ export function EncreuatGame() {
 
 			if (faltanRespuestas.length === 0) {
 				const timeWinner = times[fase].reduce((acc, curr) => {
-					return acc > curr ? acc : curr;
+					if (acc === curr) return "AB";
+					return acc > curr ? "A" : "B";
+				});
+				const respostaCorrecta = chances[fase].filter((chance) => {
+					console.log(chance, dades[fase].d.nom);
+					if (chance === dades[fase].d.nom) {
+						console.log("resposta correcta");
+					}
+					return chance;
 				});
 				const playerWinner: string = timeWinner !== times[fase][0] ? "A" : "B";
-				console.log("win?", playerWinner);
+				console.log("time win?", timeWinner);
 				const newResultat = [...resultat];
-				newResultat[fase] = playerWinner;
-				console.log("Taula de reultats previa al set:\n", newResultat);
+
+				newResultat[fase] = String(timeWinner);
+				console.log("Taula de resultats previa al set:\n", newResultat);
 				setResultat(newResultat);
 				//
 				setFase(chances[5][0]);
@@ -224,12 +233,16 @@ export function EncreuatGame() {
 									</h5>
 									{chances.map((chance, index) =>
 										index < 5 ? (
-											<div key={index}>
+											<div>
+												{index === 0 ? (
+													<ul className="respostes-header">
+														<li className={playerSymbol === "B" ? "or1" : "or3"}>temps</li>
+														<li className="or2">paraula</li>
+														<li className={playerSymbol === "B" ? "or3" : "or1"}>resultat</li>
+													</ul>
+												) : null}
 												{chance[0] ? (
-													<div className="resultlist">
-														<span className={playerSymbol === "A" ? "or1 index" : "or2 index"}>
-															<img className={resultat[index] === "A" ? "win" : "loose"} src="/asterisc_encreuat.svg" alt="" />
-														</span>
+													<div key={index} className="resultlist">
 														<span className={playerSymbol === "B" ? "or1 " : "or2 "}>
 															{playerSymbol === "A" ? (
 																<>
@@ -243,6 +256,13 @@ export function EncreuatGame() {
 																</>
 															)}
 														</span>
+														<span className={playerSymbol === "A" ? "or1 index" : "or2 index"}>
+															<img
+																className={resultat[index] === "AB" ? "pair" : resultat[index] === "A" ? "win" : "loose"}
+																src="/asterisc_encreuat.svg"
+																alt=""
+															/>
+														</span>
 													</div>
 												) : null}
 											</div>
@@ -255,12 +275,16 @@ export function EncreuatGame() {
 									</h5>
 									{chances.map((chance, index) =>
 										index < 5 ? (
-											<div key={index}>
+											<div>
+												{index === 0 ? (
+													<ul className="respostes-header">
+														<li className={playerSymbol === "A" ? "or1" : "or3"}>temps</li>
+														<li className="or2">paraula</li>
+														<li className={playerSymbol === "A" ? "or3" : "or1"}>resultat</li>
+													</ul>
+												) : null}
 												{chance[1] ? (
-													<div className="resultlist">
-														<span className={playerSymbol === "A" ? "or2 index" : "or1 index"}>
-															<img className={resultat[index] === "B" ? "win" : "loose"} src="/asterisc_encreuat.svg" alt="" />
-														</span>
+													<div className="resultlist" key={index}>
 														<span className={playerSymbol === "B" ? "or2" : "or1"}>
 															{playerSymbol === "B" ? (
 																<>
@@ -273,6 +297,13 @@ export function EncreuatGame() {
 																	<span className="paraula">{handleName(chance[1], false)}</span>
 																</>
 															)}
+														</span>
+														<span className={playerSymbol === "A" ? "or2 index" : "or1 index"}>
+															<img
+																className={resultat[index] === "AB" ? "pair" : resultat[index] === "B" ? "win" : "loose"}
+																src="/asterisc_encreuat.svg"
+																alt=""
+															/>
 														</span>
 													</div>
 												) : null}
