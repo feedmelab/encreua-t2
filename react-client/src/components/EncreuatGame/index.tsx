@@ -42,7 +42,7 @@ export interface IStartJoc {
 }
 
 export function EncreuatGame() {
-	const [resultat, setResultat] = useState<IPlayerResultats>([null, null, null, null, null]);
+	const [resultatTemps, setresultatTemps] = useState<IPlayerResultats>([null, null, null, null, null]);
 	const [chances, setChances] = useState<IPlayerRespostes>([[null, null], [null, null], [null, null], [null, null], [null, null], [0]]);
 	const [times, setTimes] = useState<IPlayerTimes>([
 		[null, null],
@@ -75,7 +75,7 @@ export function EncreuatGame() {
 	const [remaining, setRemaining] = useState<number | null>(null);
 	const updateGameChances = async (event: React.FormEvent | null, fase: number, puntero: number, resposta: string) => {
 		if (event) event.preventDefault();
-
+		if (resposta === "") resposta = "Passo";
 		if (fase < 5) {
 			const newChances = [...chances];
 			const newTimes = [...times];
@@ -116,23 +116,23 @@ export function EncreuatGame() {
 			if (faltanRespuestas.length === 0) {
 				const timeWinner = times[fase].reduce((acc, curr) => {
 					if (acc === curr) return "AB";
-					return acc > curr ? "A" : "B";
+					return acc < curr ? "A" : "B";
 				});
-				const respostaCorrecta = chances[fase].filter((chance) => {
-					console.log(chance, dades[fase].d.nom);
+				const respostaCorrecta = chances[fase].filter((chance, index) => {
 					if (chance === dades[fase].d.nom) {
+						console.log("chance:", chance, "nom real:", dades[fase].d.nom, "index:", index === 0 ? "PlayerA" : "PlayerB");
 						console.log("resposta correcta");
+						return index === 0 ? "A" : "B";
 					}
-					return chance;
 				});
 				const playerWinner: string = timeWinner !== times[fase][0] ? "A" : "B";
-				console.log("time win?", timeWinner);
-				const newResultat = [...resultat];
+				//console.log("resposta win?", respostaCorrecta);
+				const newresultatTemps = [...resultatTemps];
 
-				newResultat[fase] = String(timeWinner);
-				console.log("Taula de resultats previa al set:\n", newResultat);
-				setResultat(newResultat);
-				//
+				newresultatTemps[fase] = String(timeWinner);
+				//console.log("Taula de resultatTempss previa al set:\n", newresultatTemps);
+				setresultatTemps(newresultatTemps);
+
 				setFase(chances[5][0]);
 			}
 		}
@@ -142,10 +142,10 @@ export function EncreuatGame() {
 	// 	const timeWinner = times[fase].reduce((acc: string, curr: string) => {
 	// 		return acc > curr ? (playerSymbol === "A" ? "A" : "B") : playerSymbol === "B" ? "B" : "A";
 	// 	});
-	// 	const newResultat = [...resultat];
-	// 	newResultat[fase] = timeWinner;
+	// 	const newresultatTemps = [...resultatTemps];
+	// 	newresultatTemps[fase] = timeWinner;
 
-	// 	setResultat(newResultat);
+	// 	setresultatTemps(newresultatTemps);
 
 	// 	//return timeWinner;
 	// };
@@ -258,7 +258,7 @@ export function EncreuatGame() {
 														</span>
 														<span className={playerSymbol === "A" ? "or1 index" : "or2 index"}>
 															<img
-																className={resultat[index] === "AB" ? "pair" : resultat[index] === "A" ? "win" : "loose"}
+																className={resultatTemps[index] === "AB" ? "pair" : resultatTemps[index] === "A" ? "win" : "loose"}
 																src="/asterisc_encreuat.svg"
 																alt=""
 															/>
@@ -300,7 +300,7 @@ export function EncreuatGame() {
 														</span>
 														<span className={playerSymbol === "A" ? "or2 index" : "or1 index"}>
 															<img
-																className={resultat[index] === "AB" ? "pair" : resultat[index] === "B" ? "win" : "loose"}
+																className={resultatTemps[index] === "AB" ? "pair" : resultatTemps[index] === "B" ? "win" : "loose"}
 																src="/asterisc_encreuat.svg"
 																alt=""
 															/>
@@ -316,6 +316,13 @@ export function EncreuatGame() {
 					</EnctBox>
 					<EnctBox>
 						<ParaulesIdecBox>
+							<h4>Has perdut, t'hauràs d'esforçar un xic més! </h4>
+							<img src="/blocks.svg" alt="" />
+						</ParaulesIdecBox>
+					</EnctBox>
+					<EnctBox>
+						<ParaulesIdecBox>
+							<h4>Respostes correctes</h4>
 							<ul>
 								{[...dades].map((dada: any, index: number) => {
 									return (

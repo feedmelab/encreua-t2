@@ -2,48 +2,13 @@ import styled, { keyframes } from "styled-components";
 
 export const blink = keyframes`
 	0%{ transform: scale( 1 ) }
-	20%{ transform: scale( 1.15 ) }
-	40%{ transform: scale( 1 ) }
-	60%{ transform: scale( 1.1 ) }
+	20%{ transform: scale( 1.15 ) rotate(-360deg); }
+	40%{ transform: scale( 1 ) rotate(0deg)}
+	50%{ transform: scale( 1.1 ) }
 	80%{ transform: scale( 1 ) }
 	100%{ transform: scale( 1 ) }
 `;
-export const EnctContainer = styled.div`
-	${
-		"" /* display: flex;
-	align-items: center;
-	flex-direction: column;
-	background-color: white;
-	width: 89%;
-	padding-bottom: 2rem;
-	border-bottom-left-radius: 2rem;
-	border-bottom-right-radius: 2rem;
-	h2,
-	h3,
-	h4,
-	h5,
-	h6 {
-		text-align: center;
-	}
-	p {
-		text-align: center;
-	}
-	button {
-		display: flex;
-		font-size: 1rem;
-		margin-top: 1rem;
-		width: 100%;
-		color: var(--btn-color);
-		padding: 0.5rem;
-		justify-content: center;
-		border-radius: 0.5rem;
-		background: linear-gradient(var(--btn-up), var(--btn-down));
-		border-color: var(--border);
-		text-shadow: 1px 1px rgb(0, 0, 80);
-		font-family: "Varela Round", sans-serif;
-	} */
-	}
-`;
+export const EnctContainer = styled.div``;
 export const EnctBox = styled.div`
 	border: none;
 	margin-bottom: 1rem;
@@ -484,8 +449,8 @@ export const ChancesContainer = styled.div`
 	div.block {
 		display: flex;
 		flex-direction: column;
-
-		padding: 0.3rem;
+		border-radius: 0.5rem;
+		padding: 0.8rem;
 		width: 49%;
 		border: 1px solid var(--border);
 		background: var(--color-clar);
@@ -564,9 +529,18 @@ export const ParaulesIdecBox = styled.div`
 	padding: 2rem;
 	h5 {
 		font-size: 1rem;
+		color: var(--text-par);
+		font-weight: bold;
+		letter-spacing: 0.1rem;
+		text-shadow: 0.05rem 0.1rem 3px var(--color-fosc);
+	}
+	h4 {
+		font-size: 1.2rem;
+		margin-bottom: 2.5rem;
 		color: var(--textclar);
 		font-weight: bold;
 		letter-spacing: 0.1rem;
+		text-shadow: 0.05rem 0.1rem 3px var(--color-fosc);
 	}
 	p {
 		font-size: 0.7rem;
@@ -585,6 +559,7 @@ export const ParaulesIdecBox = styled.div`
 		justify-content: flex-end;
 		height: 3rem;
 		margin-top: 1rem;
+		color: var(--text-par);
 	}
 	div.thankyou span {
 		font-size: 0.6rem;
