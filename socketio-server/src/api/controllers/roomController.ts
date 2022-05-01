@@ -1,7 +1,6 @@
 import { ConnectedSocket, MessageBody, OnMessage, SocketController, SocketIO } from "socket-controllers";
 import { Server, Socket } from "socket.io";
 import axios from "axios";
-import { SocketReservedEventsMap } from "socket.io/dist/socket";
 
 @SocketController()
 export class RoomController {

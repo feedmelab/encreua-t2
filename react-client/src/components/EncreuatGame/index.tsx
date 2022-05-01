@@ -26,6 +26,7 @@ import {
 	ParaulesIdecBox,
 	EnctBoxLoader,
 	RespostesBoxContainer,
+	Congrats,
 } from "./Encreuat.styles";
 
 export type IPlayerRespostes = Array<Array<string | number | null>>;
@@ -59,7 +60,7 @@ export const EncreuatGame = () => {
 		[null, null],
 		[null, null],
 	]);
-	const [winner, setWinner] = useState<string>("");
+
 	const {
 		room,
 		setRoom,
@@ -79,7 +80,6 @@ export const EncreuatGame = () => {
 		setDades,
 	} = useContext(gameContext);
 
-	const [a_paraula, setAParaula] = useState<Array<string>>([]);
 	const [remaining, setRemaining] = useState<number | null>(null);
 	const updateGameChances = async (event: React.FormEvent | null, fase: number, puntero: number, resposta: string) => {
 		if (event) event.preventDefault();
@@ -87,6 +87,7 @@ export const EncreuatGame = () => {
 		if (fase < 5) {
 			const newChances = [...chances];
 			const newTimes = [...times];
+
 			if (newChances[fase][puntero] === "" || newChances[fase][puntero] === null) {
 				newChances[fase][puntero] = resposta;
 				newTimes[fase][puntero] = remaining;
@@ -96,11 +97,8 @@ export const EncreuatGame = () => {
 
 			if (socketService.socket) {
 				gameService.updateGame(socketService.socket, newChances, newTimes);
-
 				setPlayerTurn(false);
-
 				setPlayerRes("");
-
 				if (fase === 4) checkLastRound(newChances);
 			}
 		}
@@ -113,7 +111,6 @@ export const EncreuatGame = () => {
 				setTimes(newTimes);
 				handleGameUpdate();
 				setPlayerTurn(true);
-
 				checkLastRound(newChances);
 			});
 	};
@@ -132,17 +129,12 @@ export const EncreuatGame = () => {
 				const winners: any = [];
 				const paraulaWinner = chances[fase].filter((chance, index) => {
 					let pa = chance?.toString();
-					//console.log(chance, dades[fase].d.nom, decodeURIComponent(pa), pa);
 					if (pa !== "Passo" && pa === dades[fase].d.nom) {
 						winners.push(index === 0 ? "A" : "B");
-
-						//return index === 0 ? "A" : "B";
 					}
 
 					return index === 1 ? winners.join("") : null;
 				});
-
-				// const playerWinner: string = timeWinner !== times[fase][0] ? "A" : "B";
 
 				const newresultatTemps = [...resultatTemps];
 				const newresultatParaula = [...resultatParaula];
@@ -152,49 +144,26 @@ export const EncreuatGame = () => {
 				newresultatParaula[fase] = [...winners];
 
 				const npunts = [...punts];
-				//console.log(finalWinner);
-				//newresultatFinal[fase] = finalWinner;
-				//console.log("resposta correcta", newresultatFinal);
-				//console.log("Taula de resultatTempss previa al set:\n", newresultatTemps);
-				// console.log("temps winner: ", newresultatTemps[fase]);
-				// console.log("newResultatParaula: ", String(newresultatParaula[fase]));
 
 				// hi ha tie de parules
 				if (String(newresultatParaula[fase]) === "A,B") {
-					//console.log("TIE DE PARAULA", paraulaWinner);
 					newresultatFinal[fase] = newresultatTemps[fase];
 					npunts[0] = npunts[0] += newresultatFinal[fase] === "A" ? 3 : newresultatFinal[fase] === "AB" ? 1 : 2;
 					npunts[1] = npunts[1] += newresultatFinal[fase] === "B" ? 3 : newresultatFinal[fase] === "AB" ? 1 : 2;
 				} else if (String(newresultatParaula[fase]) !== "") {
-					console.log("NO TIE and a WINNER?:", String(newresultatParaula[fase]));
 					newresultatFinal[fase] = String(newresultatParaula[fase]);
 					npunts[String(newresultatParaula[fase]) === "A" ? 0 : 1] = punts[String(newresultatParaula[fase]) === "A" ? 0 : 1] += 3;
 				}
 
 				setPunts(npunts);
-				console.log(npunts);
 				setresultatParaula(newresultatParaula);
 				setresultatTemps(newresultatTemps);
 				setresultatFinal(newresultatFinal);
-				console.log(newresultatFinal);
-
 				setFase(chances[5][0]);
 			}
 		}
 	};
 
-	// const handleResults = (times: any) => {
-	// 	console.log(playerSymbol);
-	// 	const timeWinner = times[fase].reduce((acc: string, curr: string) => {
-	// 		return acc > curr ? (playerSymbol === "A" ? "A" : "B") : playerSymbol === "B" ? "B" : "A";
-	// 	});
-	// 	const newresultatTemps = [...resultatTemps];
-	// 	newresultatTemps[fase] = timeWinner;
-
-	// 	setresultatTemps(newresultatTemps);
-
-	// 	//return timeWinner;
-	// };
 	const handleName = (name: any, flag: boolean) => {
 		const n = name.replace(/[a-zA-ZÀ-ú]/gi, "*");
 		return flag ? n : name;
@@ -232,9 +201,14 @@ export const EncreuatGame = () => {
 		} else return;
 	};
 
-	const getResults = (fase: number, puntero: number) => {
-		const base = dades[fase][puntero];
-		//console.log(base);
+	const getCongratsGrade = (punts: any) => {
+		const congrats =
+			punts > 10
+				? "Enhorabona!\nHas guanyat la partida amb una puntuació espectacular!"
+				: punts < 5
+				? "Enhorabona! Has guanyat la partida..però pel pèls..;)"
+				: "Enhorabona!!\nHas guanyat la partida!";
+		return congrats;
 	};
 	useEffect(() => {
 		handleGameUpdate();
@@ -272,7 +246,6 @@ export const EncreuatGame = () => {
 					<EnctBox>
 						<ParaulesRespostesBox>
 							<h4>La partida ha finalitzat</h4>
-
 							<ChancesContainer>
 								<div className={playerSymbol === "A" ? "or1 block l" : "or2 block l"}>
 									<h5 className={playerSymbol === "A" ? "teu" : "seu"}>
@@ -282,14 +255,14 @@ export const EncreuatGame = () => {
 										index < 5 ? (
 											<div>
 												{index === 0 ? (
-													<ul className="respostes-header">
+													<ul key={index} className="respostes-header">
 														<li className={playerSymbol === "B" ? "or1" : "or3"}>temps</li>
 														<li className="or2">paraula</li>
 														<li className={playerSymbol === "B" ? "or3" : "or1"}>resultat</li>
 													</ul>
 												) : null}
 												{chance[0] ? (
-													<div key={index} className="resultlist">
+													<div className="resultlist">
 														<span className={playerSymbol === "B" ? "or1 " : "or2 "}>
 															{playerSymbol === "A" ? (
 																<>
@@ -324,14 +297,14 @@ export const EncreuatGame = () => {
 										index < 5 ? (
 											<div>
 												{index === 0 ? (
-													<ul className="respostes-header">
+													<ul key={index} className="respostes-header">
 														<li className={playerSymbol === "A" ? "or1" : "or3"}>temps</li>
 														<li className="or2">paraula</li>
 														<li className={playerSymbol === "A" ? "or3" : "or1"}>resultat</li>
 													</ul>
 												) : null}
 												{chance[1] ? (
-													<div className="resultlist" key={index}>
+													<div className="resultlist">
 														<span className={playerSymbol === "B" ? "or2" : "or1"}>
 															{playerSymbol === "B" ? (
 																<>
@@ -363,26 +336,65 @@ export const EncreuatGame = () => {
 					</EnctBox>
 					<EnctBox>
 						<ParaulesIdecBox>
-							{punts[0] > punts[1] ? (
-								playerSymbol === "A" ? (
+							<Congrats>
+								{punts[0] > punts[1] ? (
+									playerSymbol === "A" ? (
+										<>
+											<Confetti
+												colors={["#E7B141", "#569F99"]}
+												drawShape={(ctx) => {
+													ctx.fillRect(2, 2, 5, 8);
+												}}
+											/>
+											<h4>{getCongratsGrade(punts[0])}</h4>
+										</>
+									) : (
+										<>
+											<h4>
+												Has perdut... :-(
+												<br />
+												Torna-hi!
+											</h4>
+										</>
+									)
+								) : punts[0] === punts[1] ? (
+									punts[1] > 0 ? (
+										<>
+											<h4>
+												Taules ;)
+												<br />
+												Bona partida!
+											</h4>
+										</>
+									) : (
+										<>
+											<h4>
+												Si tu passes...
+												<br />
+												jo també passo ;)
+											</h4>
+										</>
+									)
+								) : playerSymbol === "B" ? (
 									<>
-										<Confetti colors={["#E7B141", "#569F99"]} />
-										<h4>Enhorabona!, has guanyat la partida!</h4>
+										<Confetti
+											colors={["#E7B141", "#569F99"]}
+											drawShape={(ctx) => {
+												ctx.fillRect(2, 2, 3, 6);
+											}}
+										/>
+										<h4>{getCongratsGrade(punts[1])}</h4>
 									</>
 								) : (
-									<h4>Has perdut!</h4>
-								)
-							) : punts[0] === punts[1] ? (
-								punts[1] > 0 ? (
-									<h4>Taules ;) Bona partida!</h4>
-								) : (
-									<h4>Si tu passes... jo passo ;)</h4>
-								)
-							) : playerSymbol === "B" ? (
-								<h4>Enhorabona!, has guanyat la partida!</h4>
-							) : (
-								<h4>Has perdut!</h4>
-							)}
+									<>
+										<h4>
+											Has perdut! :-(
+											<br />
+											Torna-hi!
+										</h4>
+									</>
+								)}
+							</Congrats>
 						</ParaulesIdecBox>
 					</EnctBox>
 					<EnctBox>
@@ -391,7 +403,7 @@ export const EncreuatGame = () => {
 							<ul>
 								{[...dades].map((dada: any, index: number) => {
 									return (
-										<li>
+										<li key={index}>
 											<h5>{dada.d.nom}</h5>
 											<p>{dada.d.descripcio}</p>
 										</li>
@@ -465,42 +477,6 @@ export const EncreuatGame = () => {
 									</div>
 								</RespostesBoxContainer>
 							</EnctInfo>
-							{/* <ChancesContainer>
-								<div className={playerSymbol === "A" ? "or1 block l" : "or2 block l"}>
-									{chances.map((chance, index) =>
-										index < 5 ? (
-											<div key={index}>
-												{chance[0] ? (
-													<div className="resultlist">
-														<span className={playerSymbol === "A" ? "or1 index" : "or2 index"}> {index + 1} </span>
-														<span className={playerSymbol === "B" ? "or1" : "or2"}>
-															{handleName(chance[0], playerSymbol === "B" ? true : false)}
-															<span className="remaining">[{times[index][0]} s.]</span>
-														</span>
-													</div>
-												) : null}
-											</div>
-										) : null
-									)}
-								</div>
-								<div className={playerSymbol === "B" ? "or1 block r" : "or2 block r"}>
-									{chances.map((chance, index) =>
-										index < 5 ? (
-											<div key={index}>
-												{chance[1] ? (
-													<div className="resultlist">
-														<span className={playerSymbol === "A" ? "or2 index" : "or1 index"}> {index + 1} </span>
-														<span className={playerSymbol === "B" ? "or2" : "or1"}>
-															{handleName(chance[1], playerSymbol === "A" ? true : false)}
-															<span className="remaining">[{times[index][1]} s.]</span>
-														</span>
-													</div>
-												) : null}
-											</div>
-										) : null
-									)}
-								</div>
-							</ChancesContainer> */}
 						</ParaulesRespostesBox>
 					</EnctBox>
 
@@ -536,7 +512,10 @@ export const EncreuatGame = () => {
 					</EnctBox>
 					{isPlayerTurn && fase < 5 ? (
 						<EnctBox>
-							<EnctRespostaForm>
+							<EnctRespostaForm
+								onKeyDown={(e) => {
+									e.key === "Enter" && e.preventDefault();
+								}}>
 								<h4>La teva resposta</h4>
 								<input type="text" required data-errormessage-value-missing="Digues quelcom raonable.." onChange={handleInputRes} />
 								<EnctBotoneraBox>
@@ -549,6 +528,9 @@ export const EncreuatGame = () => {
 									<button
 										className="btn btn-danger"
 										type="button"
+										onKeyPress={(e) => {
+											e.key === "Enter" && e.preventDefault();
+										}}
 										onClick={(e: any) => updateGameChances(e, fase, playerSymbol === "A" ? 0 : 1, playerRes)}>
 										ENVIAR
 									</button>

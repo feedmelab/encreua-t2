@@ -18,24 +18,10 @@ class GameService {
 
 		socket.emit("update_game", { chances: gameChances, times: gameTimes });
 	}
-	public async endGame(socket: Socket, respostes: IPlayerRespostes): Promise<boolean> {
-		return new Promise((rs, rj) => {
-			socket.emit("end_game", { respostes });
-			socket.on("game_ended", () => rs(true));
-			socket.on("game_end_error", ({ error }) => rj(error));
-		});
-	}
-	public async onGameCheck(socket: Socket, listiner: (chances: IPlayerRespostes) => void) {
-		socket.on("on_game_check", ({ chances }) => listiner(chances));
-	}
+
 	public async onGameUpdate(socket: Socket, listiner: (chances: IPlayerRespostes, times: IPlayerTimes) => void) {
 		socket.on("on_game_update", ({ chances, times }) => {
 			listiner(chances, times);
-		});
-	}
-	public async onGameEnd(socket: Socket, listiner: (chances: IPlayerRespostes) => void) {
-		socket.on("on_game_end", ({ chances }) => {
-			listiner(chances);
 		});
 	}
 

@@ -15,16 +15,4 @@ export class GameController {
 		const gameRoom = this.getSocketGameRoom(socket);
 		socket.to(gameRoom).emit("on_game_update", message);
 	}
-
-	@OnMessage("check_game")
-	public async checkGame(@SocketIO() io: Server, @ConnectedSocket() socket: Socket, @MessageBody() message: any) {
-		const gameRoom = this.getSocketGameRoom(socket);
-		socket.to(gameRoom).emit("on_game_check", message);
-	}
-
-	@OnMessage("game_win")
-	public async gameWin(@SocketIO() io: Server, @ConnectedSocket() socket: Socket, @MessageBody() message: any) {
-		const gameRoom = this.getSocketGameRoom(socket);
-		socket.to(gameRoom).emit("on_game_win", message);
-	}
 }

@@ -573,3 +573,17 @@ export const ParaulesIdecBox = styled.div`
 		margin-right: 0.2rem;
 	}
 `;
+export const Congrats = styled.div`
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	div {
+		display: flex;
+		align-items: center;
+		justify-content: center;
+	}
+	h4 {
+		width: 100%;
+		text-align: center;
+	}
+`;
