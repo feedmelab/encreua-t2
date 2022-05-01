@@ -80,6 +80,7 @@ export class RoomController {
 			// "esplendor",
 			// "taronjada",
 			"sotagola",
+			"gos",
 			"algutzir",
 			"beneit",
 			"ximple",
@@ -115,7 +116,11 @@ export class RoomController {
 
 							const afterLast = (value: string, delimiter: string) => {
 								value = value || "";
-								return delimiter === "" ? value : value.split(delimiter)[3];
+								return delimiter === ""
+									? value
+									: value.split(delimiter)[3]
+									? value.split(delimiter)[3].replace(/<span(.*?)>/gi, "")
+									: value.split(delimiter)[2].replace(/<span(.*?)>/gi, "");
 							};
 							let replaced = bolsa.d.replace(/\ xmlns:fo="http:\/\/www\.w3\.org\/1999\/XSL\/Format"/g, "");
 
