@@ -3,6 +3,7 @@ import gameContext from "../../gameContext";
 import gameService from "../../services/gameService";
 import socketService from "../../services/socketService";
 import CountDownTimer from "../CountDownTimer/CountDownTimer";
+import Confetti from "react-confetti";
 
 import {
 	ChancesContainer,
@@ -16,7 +17,6 @@ import {
 	Vida,
 	VidaActiva,
 	Muerte,
-	MuerteActiva,
 	RespostesBox,
 	WaitForOther,
 	WordField,
@@ -24,7 +24,6 @@ import {
 	ParaulaBox,
 	ParaulesRespostesBox,
 	ParaulesIdecBox,
-	SplashStopper,
 	EnctBoxLoader,
 	RespostesBoxContainer,
 } from "./Encreuat.styles";
@@ -41,7 +40,7 @@ export interface IStartJoc {
 	dades: [];
 }
 
-export function EncreuatGame() {
+export const EncreuatGame = () => {
 	const [resultatTemps, setresultatTemps] = useState<IPlayerResultats>([null, null, null, null, null]);
 	const [resultatParaula, setresultatParaula] = useState<IPlayerRespostes>([
 		[null, null],
@@ -162,7 +161,7 @@ export function EncreuatGame() {
 
 				// hi ha tie de parules
 				if (String(newresultatParaula[fase]) === "A,B") {
-					console.log("TIE DE PARAULA", newresultatTemps[fase]);
+					//console.log("TIE DE PARAULA", paraulaWinner);
 					newresultatFinal[fase] = newresultatTemps[fase];
 					npunts[0] = npunts[0] += newresultatFinal[fase] === "A" ? 3 : newresultatFinal[fase] === "AB" ? 1 : 2;
 					npunts[1] = npunts[1] += newresultatFinal[fase] === "B" ? 3 : newresultatFinal[fase] === "AB" ? 1 : 2;
@@ -183,6 +182,7 @@ export function EncreuatGame() {
 			}
 		}
 	};
+
 	// const handleResults = (times: any) => {
 	// 	console.log(playerSymbol);
 	// 	const timeWinner = times[fase].reduce((acc: string, curr: string) => {
@@ -365,12 +365,19 @@ export function EncreuatGame() {
 						<ParaulesIdecBox>
 							{punts[0] > punts[1] ? (
 								playerSymbol === "A" ? (
-									<h4>Enhorabona!, has guanyat la partida!</h4>
+									<>
+										<Confetti colors={["#E7B141", "#569F99"]} />
+										<h4>Enhorabona!, has guanyat la partida!</h4>
+									</>
 								) : (
 									<h4>Has perdut!</h4>
 								)
 							) : punts[0] === punts[1] ? (
-								<h4>Taules ;) Bona partida!</h4>
+								punts[1] > 0 ? (
+									<h4>Taules ;) Bona partida!</h4>
+								) : (
+									<h4>Si tu passes... jo passo ;)</h4>
+								)
 							) : playerSymbol === "B" ? (
 								<h4>Enhorabona!, has guanyat la partida!</h4>
 							) : (
@@ -557,4 +564,4 @@ export function EncreuatGame() {
 			) : null}
 		</EnctContainer>
 	);
-}
+};
