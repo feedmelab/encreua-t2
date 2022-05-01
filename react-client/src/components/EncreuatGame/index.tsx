@@ -43,6 +43,15 @@ export interface IStartJoc {
 
 export function EncreuatGame() {
 	const [resultatTemps, setresultatTemps] = useState<IPlayerResultats>([null, null, null, null, null]);
+	const [resultatParaula, setresultatParaula] = useState<IPlayerRespostes>([
+		[null, null],
+		[null, null],
+		[null, null],
+		[null, null],
+		[null, null],
+	]);
+	const [punts, setPunts] = useState<Array<number>>([0, 0]);
+	const [resultatFinal, setresultatFinal] = useState<IPlayerResultats>([null, null, null, null, null]);
 	const [chances, setChances] = useState<IPlayerRespostes>([[null, null], [null, null], [null, null], [null, null], [null, null], [0]]);
 	const [times, setTimes] = useState<IPlayerTimes>([
 		[null, null],
@@ -51,7 +60,7 @@ export function EncreuatGame() {
 		[null, null],
 		[null, null],
 	]);
-
+	const [winner, setWinner] = useState<string>("");
 	const {
 		room,
 		setRoom,
@@ -114,24 +123,61 @@ export function EncreuatGame() {
 			const faltanRespuestas = times[fase].filter((r) => r === null);
 
 			if (faltanRespuestas.length === 0) {
+				//if time is less say time win or tie
 				const timeWinner = times[fase].reduce((acc, curr) => {
 					if (acc === curr) return "AB";
 					return acc < curr ? "A" : "B";
 				});
-				const respostaCorrecta = chances[fase].filter((chance, index) => {
-					if (chance === dades[fase].d.nom) {
-						console.log("chance:", chance, "nom real:", dades[fase].d.nom, "index:", index === 0 ? "PlayerA" : "PlayerB");
-						console.log("resposta correcta");
-						return index === 0 ? "A" : "B";
+
+				//if word is ok push to winners
+				const winners: any = [];
+				const paraulaWinner = chances[fase].filter((chance, index) => {
+					let pa = chance?.toString();
+					//console.log(chance, dades[fase].d.nom, decodeURIComponent(pa), pa);
+					if (pa !== "Passo" && pa === dades[fase].d.nom) {
+						winners.push(index === 0 ? "A" : "B");
+
+						//return index === 0 ? "A" : "B";
 					}
+
+					return index === 1 ? winners.join("") : null;
 				});
-				const playerWinner: string = timeWinner !== times[fase][0] ? "A" : "B";
-				//console.log("resposta win?", respostaCorrecta);
+
+				// const playerWinner: string = timeWinner !== times[fase][0] ? "A" : "B";
+
 				const newresultatTemps = [...resultatTemps];
+				const newresultatParaula = [...resultatParaula];
+				const newresultatFinal = [...resultatFinal];
 
 				newresultatTemps[fase] = String(timeWinner);
+				newresultatParaula[fase] = [...winners];
+
+				const npunts = [...punts];
+				//console.log(finalWinner);
+				//newresultatFinal[fase] = finalWinner;
+				//console.log("resposta correcta", newresultatFinal);
 				//console.log("Taula de resultatTempss previa al set:\n", newresultatTemps);
+				// console.log("temps winner: ", newresultatTemps[fase]);
+				// console.log("newResultatParaula: ", String(newresultatParaula[fase]));
+
+				// hi ha tie de parules
+				if (String(newresultatParaula[fase]) === "A,B") {
+					console.log("TIE DE PARAULA", newresultatTemps[fase]);
+					newresultatFinal[fase] = newresultatTemps[fase];
+					npunts[0] = npunts[0] += newresultatFinal[fase] === "A" ? 3 : newresultatFinal[fase] === "AB" ? 1 : 2;
+					npunts[1] = npunts[1] += newresultatFinal[fase] === "B" ? 3 : newresultatFinal[fase] === "AB" ? 1 : 2;
+				} else if (String(newresultatParaula[fase]) !== "") {
+					console.log("NO TIE and a WINNER?:", String(newresultatParaula[fase]));
+					newresultatFinal[fase] = String(newresultatParaula[fase]);
+					npunts[String(newresultatParaula[fase]) === "A" ? 0 : 1] = punts[String(newresultatParaula[fase]) === "A" ? 0 : 1] += 3;
+				}
+
+				setPunts(npunts);
+				console.log(npunts);
+				setresultatParaula(newresultatParaula);
 				setresultatTemps(newresultatTemps);
+				setresultatFinal(newresultatFinal);
+				console.log(newresultatFinal);
 
 				setFase(chances[5][0]);
 			}
@@ -216,6 +262,7 @@ export function EncreuatGame() {
 							<span>SALA: {room}</span>
 							<h3>Jugador: {playerSymbol}</h3>
 							<span>Fase: {fase}</span>
+							<span>Punts: {punts[playerSymbol === "A" ? 0 : 1]}</span>
 						</div>
 					)}
 				</EnctTitle>
@@ -316,8 +363,19 @@ export function EncreuatGame() {
 					</EnctBox>
 					<EnctBox>
 						<ParaulesIdecBox>
-							<h4>Has perdut, t'hauràs d'esforçar un xic més! </h4>
-							<img src="/blocks.svg" alt="" />
+							{punts[0] > punts[1] ? (
+								playerSymbol === "A" ? (
+									<h4>Enhorabona!, has guanyat la partida!</h4>
+								) : (
+									<h4>Has perdut!</h4>
+								)
+							) : punts[0] === punts[1] ? (
+								<h4>Taules ;) Bona partida!</h4>
+							) : playerSymbol === "B" ? (
+								<h4>Enhorabona!, has guanyat la partida!</h4>
+							) : (
+								<h4>Has perdut!</h4>
+							)}
 						</ParaulesIdecBox>
 					</EnctBox>
 					<EnctBox>
