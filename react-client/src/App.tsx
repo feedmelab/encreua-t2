@@ -19,7 +19,7 @@ const App = () => {
 
 	const connectSocket = async () => {
 		// eslint-disable-next-line @typescript-eslint/no-unused-vars
-		const socket = await socketService.connect("http://192.168.1.132:9000").catch((err) => {
+		const socket = await socketService.connect("http://localhost:9000").catch((err) => {
 			console.log("Error: ", err);
 		});
 	};
