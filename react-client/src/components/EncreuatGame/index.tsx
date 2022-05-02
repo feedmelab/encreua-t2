@@ -127,6 +127,7 @@ export const EncreuatGame = () => {
 
 				//if word is ok push to winners
 				const winners: any = [];
+				// eslint-disable-next-line @typescript-eslint/no-unused-vars
 				const paraulaWinner = chances[fase].filter((chance, index) => {
 					let pa = chance?.toString();
 					if (pa !== "Passo" && pa === dades[fase].d.nom) {

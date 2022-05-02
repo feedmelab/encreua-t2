@@ -10,6 +10,7 @@ export function JoinRoom(props: IJoinRoomProps) {
 	const [roomName, setRoomName] = useState("");
 	const [isJoining, setJoining] = useState(false);
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const { setInRoom, isInRoom } = useContext(gameContext);
 
 	const handleRoomNameChange = (e: React.ChangeEvent<any>) => {
