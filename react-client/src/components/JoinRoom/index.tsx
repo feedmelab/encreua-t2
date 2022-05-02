@@ -41,9 +41,10 @@ export function JoinRoom(props: IJoinRoomProps) {
 					<WelcomeMessage>Benvingut/da a l'Encreua't!</WelcomeMessage>
 
 					<RoomPar>
-						Un joc on hauràs de trobar les paraules correctes deduïnt-les amb les descripcions que t'anirem donant...
+						Un joc on hauràs de trobar 5 paraules correctes deduïnt-les amb les descripcions que t'anirem donant...
 						<br />
-						Però això no és tot, hauràs de descobrir-ne més de les que en descobreixi el teu contrincant!!
+						<br />
+						Però això no és tot, hauràs de descobrir-ne més de les que en descobreixi el teu contrincant i fer-ho més ràpid!!
 					</RoomPar>
 				</RoomsBox>
 				<RoomsBox>
