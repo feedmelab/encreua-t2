@@ -120,7 +120,7 @@ export const EncreuatGame = () => {
 
 			if (faltanRespuestas.length === 0) {
 				//if time is less say time win or tie
-				const timeWinner = times[fase].reduce((acc, curr) => {
+				const timeWinner: any = times[fase].reduce((acc: any, curr: any) => {
 					if (acc === curr) return "AB";
 					return acc < curr ? "A" : "B";
 				});
